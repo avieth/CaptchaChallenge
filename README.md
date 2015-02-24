@@ -33,7 +33,7 @@ case outcome of
   Passed p -> ...
   -- ^ Solution matches the one we have on file. p has type ChallengePassed;
   --   you can use that type to indicate statically that your function needs
-  --   a captcha challenge before its used.
+  --   a captcha challenge before it's used.
   Failed -> ...
   -- ^ Solution is no good; are you a robot?
   BadKey -> ...
@@ -45,4 +45,7 @@ case outcome of
 See `examples/CLI.hs` for an example CLI utility.
 
 This needs [Manifest-Redis](https://github.com/avieth/Manifest-Redis) in order
-to compile.
+to compile. Keys are stored in a redis manifest along with the corresponding
+solutions. They expire after 600 seconds, at which point subsequent solution
+attempts will receive `BadKey` because the key is not found. Once an
+attempted solution passes, we remove the key from redis.
